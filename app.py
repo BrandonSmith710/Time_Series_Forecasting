@@ -49,10 +49,10 @@ def scale_data(df):
 def create_dataset(data, look_back=None, look_ahead=None, predict_only_last=None):
     """
     Accepts a 2d array and returns X and y sequences containing 
-    look_back + look_ahead + 1 days information for a total of
+    look_back + look_ahead + 1 timesteps information for a total of
     (time_series_size) - (look_back + look_ahead + 1) elements,
-    each element of X being of look_back length and y of either 
-    length look_ahead or length one if predict_only_last.
+    each element of X being of look_back length; and each of y 
+    either length look_ahead or length one if predict_only_last.
     """
 
 
@@ -93,6 +93,15 @@ def create_split(df, look_back=None, look_ahead=None, train_size=0.70, predict_o
     X_test, y_test = create_dataset(test, look_back=look_back, look_ahead=look_ahead, predict_only_last=predict_only_last)
 
     return X_train, y_train, X_test, y_test
+
+def inverse_scaling(data, scaler_dict, output_feat_name):
+    """
+    Accepts still-scaled forecast sequences and returns
+    the real-time forecasts.
+    """
+    
+    
+    return scaler_dict[output_feat_name].inverse_transform(data)
     
 df, scalers = scale_data(df)
 look_back, look_ahead = 28, 7
@@ -154,3 +163,13 @@ history = model.fit(X_train, y_train,
 # retrieve the still-scaled predictions
 train_predict = model.predict(X_train)
 test_predict = model.predict(X_test)
+
+# unscale the data
+y_train = inverse_scaling(y_train, scalers, 'Adj Close')
+y_test = inverse_scaling(y_test, scalers, 'Adj Close')
+
+train_predict = inverse_scaling(train_predict, scalers, 'Adj Close')
+test_predict = inverse_scaling(test_predict, scalers, 'Adj Close')
+
+# this sequence contains the forecasted values for look_ahead timesteps
+seven_day_prediction = test_predict[-1]
