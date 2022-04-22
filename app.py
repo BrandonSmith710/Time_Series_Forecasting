@@ -79,7 +79,6 @@ def create_dataset(data, look_back=None, look_ahead=None, predict_only_last=None
     return np.array(X_data), np.array(Y_data)
   
 def create_split(df, look_back=None, look_ahead=None, train_size=0.70, predict_only_last=None):
-
     """
     Returns a training and testing split for the 2d array that is passed in.
     """
@@ -89,8 +88,12 @@ def create_split(df, look_back=None, look_ahead=None, train_size=0.70, predict_o
     train_size = int(n_samples * train_size)
     train = df.iloc[:train_size].values
     test = df.iloc[train_size:].values
-    X_train, y_train = create_dataset(train, look_back=look_back, look_ahead=look_ahead, predict_only_last=predict_only_last)
-    X_test, y_test = create_dataset(test, look_back=look_back, look_ahead=look_ahead, predict_only_last=predict_only_last)
+    X_train, y_train = create_dataset(train, look_back=look_back,
+                                      look_ahead=look_ahead,
+                                      predict_only_last=predict_only_last)
+    X_test, y_test = create_dataset(test, look_back=look_back,
+                                    look_ahead=look_ahead,
+                                    predict_only_last=predict_only_last)
 
     return X_train, y_train, X_test, y_test
 
@@ -106,7 +109,10 @@ def inverse_scaling(data, scaler_dict, output_feat_name):
 df, scalers = scale_data(df)
 look_back, look_ahead = 28, 7
 predict_only_last = False
-X_train, y_train, X_test, y_test = create_split(df, look_back=look_back, look_ahead=look_ahead, train_size=0.7, predict_only_last=predict_only_last)
+X_train, y_train, X_test, y_test = create_split(df, look_back=look_back,
+                                                look_ahead=look_ahead,
+                                                train_size=0.7,
+                                                predict_only_last=predict_only_last)
 
 # set the epochs and dimensions of data
 n_feats = 2
