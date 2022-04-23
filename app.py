@@ -153,7 +153,7 @@ model = Sequential()
 model.add(LSTM(256, input_shape=input_shape, activation='tanh', return_sequences=False))
 # dropout regularization
 model.add(Dropout(dropout_prob))
-model.add(Dense(la, activation='relu'))
+model.add(Dense(look_ahead, activation='relu'))
 model.compile(loss='mean_squared_error', optimizer=opt, metrics=['mean_absolute_error'])
 model.summary()
 
