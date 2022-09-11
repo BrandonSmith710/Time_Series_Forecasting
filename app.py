@@ -19,7 +19,6 @@ from tensorflow.keras import regularizers, optimizers
 from tensorflow.keras.callbacks import EarlyStopping, LearningRateScheduler
 
 # load in data
-up = files.upload()
 df2 = pd.read_csv('TSLA.csv'), parse_dates=['Date'], index_col='Date')
 df = df2[['Adj Close', 'Volume']]
 
